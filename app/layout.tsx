@@ -9,27 +9,28 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'AITEC - Advanced Institute of Technology and Engineering',
-  description: 'AITEC offers world-class engineering and technology education programs designed to shape the next generation of innovators and leaders.',
-  generator: 'v0.app',
+  title: "AITEC - Nurturing Creative Professionals",
+  description:
+    "African International Technical College, is a premier educational institution dedicated to providing cutting-edge education in technology and engineering fields.",
+  generator: "v0.app",
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: "/logo.jpeg",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: "/logo.jpeg",
+        media: "(prefers-color-scheme: dark)",
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/logo.jpeg",
+        type: "image/svg+xml",
       },
     ],
-    apple: '/apple-icon.png',
+    apple: "/logo.jpeg",
   },
-}
+};
 
 export default function RootLayout({
   children,

@@ -40,22 +40,45 @@ export default function Contact() {
   return (
     <div className="w-full">
       {/* Page Header with Background Image */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 -z-10">
+      <section className="relative py-16 md:py-24 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero-3.jpg"
-            alt="Contact background"
+            src="/ceo1.jpg"
+            alt="AITEC Campus"
             fill
             className="object-cover"
+            priority
           />
-          <div className="absolute inset-0 bg-black/50" />
+          {/* Dark Overlay */}
+          <div className="absolute inset-0 bg-black/60" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Reach out to our team today.
-          </p>
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-center md:justify-start gap-8 md:gap-12">
+            {/* Logo Image */}
+            <div className="relative w-48 h-48 md:w-56 md:h-56 flex-shrink-0">
+              <Image
+                src="/logo.jpeg"
+                alt="AITEC Logo"
+                fill
+                className="object-contain rounded-lg"
+                priority
+              />
+            </div>
+
+            {/* Text Content */}
+            <div className="text-center md:text-left text-white">
+              <h1 className="text-5xl md:text-6xl font-bold mb-4">
+                Contact Us
+              </h1>
+              <p className="text-xl text-white/90 max-w-2xl">
+                Have questions? We'd love to hear from you. Reach out to our
+                team today.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -68,7 +91,9 @@ export default function Contact() {
               <div>
                 <h2 className="text-3xl font-bold mb-8">Get in Touch</h2>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Whether you're interested in our programs, have questions about admissions, or just want to learn more about AITEC, our team is here to help.
+                  Whether you're interested in our programs, have questions
+                  about admissions, or just want to learn more about AITEC, our
+                  team is here to help.
                 </p>
               </div>
 
@@ -81,11 +106,9 @@ export default function Contact() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">Address</h3>
                     <p className="text-muted-foreground">
-                      123 Tech Avenue
+                      Mogotio Main Campus
                       <br />
-                      Silicon Valley, CA 94025
-                      <br />
-                      United States
+                      Kenya
                     </p>
                   </div>
                 </div>
@@ -96,8 +119,10 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Phone</h3>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                    <p className="text-sm text-muted-foreground">Admissions: +1 (555) 123-4568</p>
+                    <p className="text-muted-foreground">0715244974</p>
+                    <p className="text-sm text-muted-foreground">
+                      Admissions: 0715244974
+                    </p>
                   </div>
                 </div>
 
@@ -108,7 +133,9 @@ export default function Contact() {
                   <div>
                     <h3 className="font-bold text-lg mb-1">Email</h3>
                     <p className="text-muted-foreground">info@aitec.edu</p>
-                    <p className="text-sm text-muted-foreground">admissions@aitec.edu</p>
+                    <p className="text-sm text-muted-foreground">
+                      admissions@aitec.edu
+                    </p>
                   </div>
                 </div>
 
@@ -146,7 +173,10 @@ export default function Contact() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Full Name
                     </label>
                     <Input
@@ -162,7 +192,10 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Email Address
                     </label>
                     <Input
@@ -178,14 +211,17 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Phone Number (Optional)
                     </label>
                     <Input
                       id="phone"
                       name="phone"
                       type="tel"
-                      placeholder="+1 (555) 000-0000"
+                      placeholder="+254712345678"
                       value={formData.phone}
                       onChange={handleChange}
                       className="bg-background border-border"
@@ -193,7 +229,10 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Subject
                     </label>
                     <select
@@ -213,7 +252,10 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium mb-2"
+                    >
                       Message
                     </label>
                     <textarea
@@ -248,7 +290,10 @@ export default function Contact() {
           <h2 className="text-3xl font-bold mb-8">Visit Our Campus</h2>
           <div className="rounded-lg overflow-hidden border border-border h-96 bg-muted flex items-center justify-center">
             <div className="text-center">
-              <MapPin size={48} className="mx-auto mb-4 text-muted-foreground" />
+              <MapPin
+                size={48}
+                className="mx-auto mb-4 text-muted-foreground"
+              />
               <p className="text-muted-foreground">
                 Interactive map coming soon
                 <br />

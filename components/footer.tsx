@@ -1,5 +1,6 @@
-import Link from 'next/link';
-import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from 'lucide-react';
+import Link from "next/link";
+import { Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
+import Image from "next/image";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,9 +11,19 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* About */}
           <div>
-            <h3 className="font-bold text-xl mb-4">AITEC</h3>
+            <div className="relative w-20 h-20 md:w-20 md:h-20 flex-shrink-0">
+              <Image
+                src="/logo.jpeg"
+                alt="AITEC Logo"
+                fill
+                className="object-contain rounded-lg"
+                priority
+              />
+            </div>
             <p className="text-sm opacity-90">
-              Advanced Institute of Technology and Engineering - Shaping the future through innovative education.
+              African International Technical College, is a premier educational
+              institution dedicated to providing cutting-edge education in
+              technology and engineering fields.
             </p>
           </div>
 
@@ -36,8 +47,18 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:opacity-80 transition">
-                  Admissions
+                <a href="/resources" className="hover:opacity-80 transition">
+                  Resources
+                </a>
+              </li>
+              <li>
+                <a href="/blogs" className="hover:opacity-80 transition">
+                  Blogs
+                </a>
+              </li>
+              <li>
+                <a href="/gallery" className="hover:opacity-80 transition">
+                  Gallery
                 </a>
               </li>
             </ul>
@@ -48,23 +69,33 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Programs</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:opacity-80 transition">
-                  Engineering
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Signet Australia
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:opacity-80 transition">
-                  Technology
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Animal Health
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:opacity-80 transition">
-                  Master's Degrees
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Engineering & Building
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:opacity-80 transition">
-                  Certificates
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Business & ICT
+                </a>
+              </li>
+              <li>
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Hospitality & Liberal Science
+                </a>
+              </li>
+              <li>
+                <a href="/programs" className="hover:opacity-80 transition">
+                  Health & Applied Sciences
                 </a>
               </li>
             </ul>
@@ -76,11 +107,11 @@ export function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex gap-2">
                 <MapPin size={18} className="flex-shrink-0 mt-0.5" />
-                <p>123 Tech Avenue, Silicon Valley, CA 94025</p>
+                <p>Mogotio</p>
               </div>
               <div className="flex gap-2">
                 <Phone size={18} className="flex-shrink-0 mt-0.5" />
-                <p>+1 (555) 123-4567</p>
+                <p>+254715244974</p>
               </div>
               <div className="flex gap-2">
                 <Mail size={18} className="flex-shrink-0 mt-0.5" />

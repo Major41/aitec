@@ -1,18 +1,18 @@
-import { HeroCarousel } from '@/components/hero-carousel';
-import { PartnersCarousel } from '@/components/partners-carousel';
-import { FeaturesSection } from '@/components/features-section';
-import { TestimonialsSection } from '@/components/testimonials-section';
-import { AITEC_DATA } from '@/lib/constants';
-import { ProgramCard } from '@/components/program-card';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { EnhancedHero } from "@/components/enhanced-hero";
+import { PartnersCarousel } from "@/components/partners-carousel";
+import { FeaturesSection } from "@/components/features-section";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { AITEC_DATA } from "@/lib/constants";
+import { ProgramCard } from "@/components/program-card";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const featuredPrograms = AITEC_DATA.programs.slice(0, 3);
 
   return (
     <>
-      <HeroCarousel />
+      <EnhancedHero />
       <PartnersCarousel />
       <FeaturesSection />
 
@@ -35,7 +35,11 @@ export default function Home() {
           </div>
 
           <div className="flex justify-center">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+            <Button
+              asChild
+              size="lg"
+              className="bg-primary hover:bg-primary/90"
+            >
               <Link href="/programs">View All Programs</Link>
             </Button>
           </div>
@@ -52,7 +56,9 @@ export default function Home() {
               Ready to Transform Your Future?
             </h2>
             <p className="text-lg text-accent-foreground/90 max-w-2xl mx-auto">
-              Join thousands of successful graduates who started their journey at AITEC. Apply now and take the first step toward your dream career.
+              Join thousands of successful graduates who started their journey
+              at AITEC. Apply now and take the first step toward your dream
+              career.
             </p>
           </div>
 
