@@ -25,7 +25,7 @@ export function EnhancedHero() {
   return (
     <div className="relative w-full overflow-hidden">
       <div
-        className="relative w-full h-96 md:h-[600px] overflow-hidden group"
+        className="relative w-full h-[600px] md:h-[650px] overflow-hidden group"
         onMouseEnter={() => setAutoPlay(false)}
         onMouseLeave={() => setAutoPlay(true)}
       >
