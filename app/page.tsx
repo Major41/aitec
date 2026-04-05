@@ -17,13 +17,18 @@ interface School {
 
 async function getSchools(): Promise<School[]> {
   try {
-    const response = await fetch('/api/public/schools', {
+    const baseUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      (typeof window !== "undefined" ? "" : "http://localhost:3000");
+
+    const response = await fetch(`${baseUrl}/api/public/schools`, {
       next: { revalidate: 3600 },
     });
+
     if (!response.ok) return [];
     return await response.json();
   } catch (error) {
-    console.error('Error fetching schools:', error);
+    console.error("Error fetching schools:", error);
     return [];
   }
 }
