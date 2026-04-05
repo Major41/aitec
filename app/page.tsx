@@ -49,7 +49,7 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Featured Schools
+              Schools of Study
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Explore our specialized academic schools offering world-class programs.
