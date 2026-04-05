@@ -1,0 +1,213 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Spinner } from "@/components/ui/spinner";
+import { ArrowLeft } from "lucide-react";
+
+interface Course {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  images: string[];
+}
+
+interface School {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+}
+
+export default function SchoolCoursesPage() {
+  const params = useParams() as { schoolSlug: string };
+  const { schoolSlug } = params;
+  const [school, setSchool] = useState<School | null>(null);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSchoolAndCourses = async () => {
+      try {
+        const [schoolRes, coursesRes] = await Promise.all([
+          fetch(`/api/public/schools/${schoolSlug}`),
+          fetch(`/api/public/schools/${schoolSlug}/courses`),
+        ]);
+
+        if (schoolRes.ok) {
+          const schoolData = await schoolRes.json();
+          setSchool(schoolData);
+        }
+
+        if (coursesRes.ok) {
+          const coursesData = await coursesRes.json();
+          setCourses(coursesData.courses || []);
+        }
+      } catch (error) {
+        console.error("Error fetching school data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (schoolSlug) {
+      fetchSchoolAndCourses();
+    }
+  }, [schoolSlug]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (!school) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl font-bold">School not found</h1>
+          <Button asChild>
+            <Link href="/programs">Back to Programs</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full">
+      {/* Breadcrumb */}
+      <div className="bg-muted/50 py-4 border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Link href="/programs" className="hover:text-foreground transition">
+              Programs
+            </Link>
+            <span>/</span>
+            <span>{school.name}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* School Header */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            {/* School Image */}
+            {school.image && (
+              <div className="relative h-72 md:h-96 rounded-lg overflow-hidden">
+                <Image
+                  src={school.image}
+                  alt={school.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            {/* School Info */}
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                  {school.name}
+                </h1>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {school.description}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Courses Section */}
+      <section id="courses" className="py-20 md:py-32 bg-muted/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-12">
+            <div className="text-center space-y-4">
+              <h2 className="text-4xl md:text-5xl font-bold">
+                Courses Offered
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Explore all the programs available in {school.name}
+              </p>
+            </div>
+
+            {/* Courses Grid */}
+            {courses.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courses.map((course) => (
+                  <Link
+                    key={course._id}
+                    href={`/programs/${schoolSlug}/${course.slug}`}
+                    className="group"
+                  >
+                    <div className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col bg-card">
+                      {/* Course Image */}
+                      {course.images && course.images.length > 0 && (
+                        <div className="relative h-48 w-full overflow-hidden bg-muted">
+                          <Image
+                            src={course.images[0]}
+                            alt={course.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
+                      )}
+
+                      {/* Course Info */}
+                      <div className="p-6 flex-1 flex flex-col">
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                          {course.title}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">
+                          {course.description}
+                        </p>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                        >
+                          View Course
+                        </Button>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-lg text-muted-foreground">
+                  No courses available for this school yet.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 md:py-24 bg-accent/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-3xl md:text-4xl font-bold">Ready to Enroll?</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Start your application today and take the first step toward your
+              future.
+            </p>
+          </div>
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+            <a href="/enrollment">Begin Your Application</a>
+          </Button>
+        </div>
+      </section>
+    </div>
+  );
+}

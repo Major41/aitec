@@ -32,14 +32,13 @@ export function PartnersCarousel() {
             {duplicatedPartners.map((partner, index) => (
               <div
                 key={`${partner.id}-${index}`}
-                className="flex-shrink-0 w-48 md:w-56 bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center h-32 group cursor-pointer"
+                className="relative flex-shrink-0 w-48 md:w-56 bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center h-32 group cursor-pointer"
               >
                 <Image
                   src={partner.image}
                   alt={partner.name}
-                  width={180}
-                  height={100}
-                  className="object-contain group-hover:scale-110 transition-transform duration-300"
+                  fill
+                  className="object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ))}

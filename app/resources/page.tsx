@@ -63,53 +63,6 @@ export default function Resources() {
         </div>
       </section>
 
-      {/* Fee Structure Section */}
-      <section className="py-24 md:py-32 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-16">
-            <h2 className="text-4xl font-bold mb-4">Fee Structure</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl">
-              Transparent and comprehensive fee information for all programs.
-              Scholarships and financial aid options are available.
-            </p>
-          </div>
-
-          <FeeTable data={AITEC_DATA.feeStructure} />
-
-          <div className="mt-12 bg-accent/10 border border-accent rounded-lg p-8">
-            <h3 className="text-2xl font-bold text-accent mb-4">
-              Financial Aid & Scholarships
-            </h3>
-            <ul className="space-y-3 text-muted-foreground">
-              <li className="flex gap-3 items-start">
-                <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <span>
-                  Merit-based scholarships covering up to 50% of tuition fees
-                </span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <span>
-                  Need-based financial assistance for eligible students
-                </span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <span>
-                  Educational loans from partner financial institutions
-                </span>
-              </li>
-              <li className="flex gap-3 items-start">
-                <CheckCircle className="w-5 h-5 text-accent shrink-0 mt-0.5" />
-                <span>
-                  Installment payment options available for annual fees
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* Documents Section */}
       <section className="py-24 md:py-32 bg-muted/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

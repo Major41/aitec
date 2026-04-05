@@ -1,141 +1,190 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useState } from "react";
-import { AITEC_DATA } from "@/lib/constants";
-import { ProgramCard } from "@/components/program-card";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
-export default function Programs() {
-  const [selectedCategory, setSelectedCategory] = useState("all");
+interface Course {
+  _id: string;
+  title: string;
+  slug: string;
+  description: string;
+  images: string[];
+}
 
-  const filteredPrograms =
-    selectedCategory === "all"
-      ? AITEC_DATA.programs
-      : AITEC_DATA.programs.filter((p) => p.category === selectedCategory);
+interface School {
+  _id: string;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  courses?: Course[];
+}
+
+export default function ProgramsPage() {
+  const [schools, setSchools] = useState<School[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchSchools();
+  }, []);
+
+  const fetchSchools = async () => {
+    try {
+      const res = await fetch("/api/public/schools");
+      if (res.ok) {
+        const schoolsData = await res.json();
+
+        // Fetch courses for each school
+        const schoolsWithCourses = await Promise.all(
+          schoolsData.map(async (school: School) => {
+            const coursesRes = await fetch(
+              `/api/public/schools/${school.slug}/courses`,
+            );
+            if (coursesRes.ok) {
+              const data = await coursesRes.json();
+              return { ...school, courses: data.courses };
+            }
+            return school;
+          }),
+        );
+
+        setSchools(schoolsWithCourses);
+      }
+    } catch (error) {
+      console.error("Error fetching schools:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
-      {/* Page Header with Background Image */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
-            src="/dairy.jpg"
-            alt="Programs background"
+            src="/kmtc.jpg"
+            alt="Gallery background"
             fill
             className="object-cover"
           />
           <div className="absolute inset-0 bg-black/50" />
         </div>
-          
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Our Programs</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            Our Academic Programs
+          </h1>
           <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-            Explore our diverse range of academic and professional programs
-            designed to match your career goals.
+            Explore world-class technical education across our specialized
+            schools
           </p>
         </div>
-
       </section>
 
-      {/* Programs Section */}
-      <section className="py-24 md:py-32 bg-background">
+      {/* Schools and Courses */}
+      <section className="py-20 md:py-32 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category Filter */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6">Filter by Category</h2>
-            <div className="flex flex-wrap gap-3">
-              {AITEC_DATA.categories.map((category) => (
-                <Button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  variant={
-                    selectedCategory === category.id ? "default" : "outline"
-                  }
-                  className={
-                    selectedCategory === category.id
-                      ? "bg-primary hover:bg-primary/90 text-black"
-                      : "border-border text-foreground hover:bg-muted"
-                  }
-                >
-                  {category.label}
-                </Button>
-              ))}
-            </div>
-          </div>
+          <div className="space-y-24">
+            {schools.map((school, index) => (
+              <div key={school._id} className="space-y-12">
+                {/* School Header */}
+                <div className="space-y-4 border-b border-border pb-8">
+                  <h2 className="text-3xl md:text-4xl font-bold">
+                    {school.name}
+                  </h2>
+                  <p className="text-lg text-muted-foreground max-w-3xl">
+                    {school.description}
+                  </p>
+                </div>
 
-          {/* Programs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPrograms.map((program) => (
-              <ProgramCard key={program.id} {...program} />
+                {/* Courses Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {school.courses && school.courses.length > 0 ? (
+                    school.courses.map((course) => (
+                      <Link
+                        key={course._id}
+                        href={`/programs/${school.slug}/${course.slug}`}
+                        className="group"
+                      >
+                        <div className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col bg-card">
+                          {/* Course Image */}
+                          {course.images && course.images.length > 0 && (
+                            <div className="relative h-48 w-full overflow-hidden bg-muted">
+                              <Image
+                                src={course.images[0]}
+                                alt={course.title}
+                                fill
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+                          )}
+
+                          {/* Course Info */}
+                          <div className="p-6 flex-1 flex flex-col">
+                            <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                              {course.title}
+                            </h3>
+                            <p className="text-muted-foreground text-sm mb-4 flex-1 line-clamp-3">
+                              {course.description}
+                            </p>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                            >
+                              Read More
+                            </Button>
+                          </div>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    <div className="col-span-full text-center py-12">
+                      <p className="text-muted-foreground">
+                        No courses available for this school yet.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Divider */}
+                {index < schools.length - 1 && <hr className="mt-12" />}
+              </div>
             ))}
           </div>
 
-          {filteredPrograms.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-xl text-muted-foreground">
-                No programs found in this category.
+          {schools.length === 0 && (
+            <div className="text-center py-20">
+              <p className="text-lg text-muted-foreground">
+                No programs available at this time.
               </p>
             </div>
           )}
         </div>
       </section>
 
-      {/* Info Section */}
-      <section className="py-24 md:py-32 bg-muted/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl font-bold text-center mb-16">
-            Program Features
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Expert Faculty",
-                description:
-                  "Learn from experienced educators and industry professionals with real-world expertise.",
-              },
-              {
-                title: "Flexible Learning",
-                description:
-                  "Choose from full-time, part-time, and online formats that fit your schedule.",
-              },
-              {
-                title: "Career Support",
-                description:
-                  "Access career counseling, internship opportunities, and job placement assistance.",
-              },
-            ].map((feature, index) => (
-              <div
-                key={index}
-                className="bg-background rounded-lg border border-border p-8"
-              >
-                <h3 className="text-xl font-bold mb-3 text-primary">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
-      <section className="py-24 md:py-32 bg-accent text-accent-foreground">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
-          <div className="space-y-4">
-            <h2 className="text-4xl font-bold">Ready to Enroll?</h2>
-            <p className="text-lg text-accent-foreground/90 max-w-2xl mx-auto">
+      <section className="py-16 md:py-24 bg-accent/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <div className="space-y-3">
+            <h2 className="text-3xl md:text-4xl font-bold">Ready to Enroll?</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Start your application today and take the first step toward your
               future.
             </p>
           </div>
-
-          <Button
-            asChild
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
+          <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
             <a href="/enrollment">Begin Your Application</a>
           </Button>
         </div>

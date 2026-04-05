@@ -19,7 +19,6 @@ export function EnhancedHero() {
     return () => clearInterval(interval);
   }, [autoPlay, events.length]);
 
-
   const currentEvent = events[currentSlide];
 
   return (
@@ -54,17 +53,25 @@ export function EnhancedHero() {
               {currentEvent.description}
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button
                 size="lg"
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold cursor-pointer"
+                onClick={() => {
+                  // Create a link element
+                  const link = document.createElement("a");
+                  link.href = "/aitec brochure.pdf"; // Path to file in public folder
+                  link.download = "aitec brochure.pdf"; // Download attribute forces download
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
               >
-                View More
+                Download Brochure
               </Button>
               <Button
                 size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold cursor-pointer"
               >
                 Enroll Now
               </Button>
