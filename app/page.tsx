@@ -17,7 +17,7 @@ interface School {
 
 async function getSchools(): Promise<School[]> {
   try {
-    const response = await fetch(`${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'http://localhost:3000'}/api/public/schools`, {
+    const response = await fetch('/api/public/schools', {
       next: { revalidate: 3600 },
     });
     if (!response.ok) return [];
