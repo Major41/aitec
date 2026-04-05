@@ -1028,7 +1028,7 @@ export const AITEC_DATA = {
   events: [
     {
       id: 3,
-      title: "May Intake In Progress",
+      title: "May 2026 Intake In Progress",
       date: "March 25-26, 2025",
       time: "All Day",
       location: "Innovation Lab",
