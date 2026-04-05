@@ -115,7 +115,7 @@ export function Footer() {
               </div>
               <div className="flex gap-2">
                 <Mail size={18} className="flex-shrink-0 mt-0.5" />
-                <p>admissions@aitec.edu</p>
+                <p>aitec.mogotio@gmail.com</p>
               </div>
             </div>
           </div>

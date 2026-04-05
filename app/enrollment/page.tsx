@@ -69,7 +69,7 @@ export default function Enrollment() {
         <section className="relative py-24 md:py-32 overflow-hidden">
           <div className="absolute inset-0 -z-10">
             <Image
-              src="/images/hero-2.jpg"
+              src="/enroll.jpg"
               alt="Enrollment background"
               fill
               className="object-cover"
@@ -111,8 +111,8 @@ export default function Enrollment() {
                   please contact us at:
                 </p>
                 <div className="pt-4">
-                  <p className="font-semibold">📧 admissions@aitec.edu</p>
-                  <p className="font-semibold">📞 +1 (555) 123-4567</p>
+                  <p className="font-semibold">aitec.mogotio@gmail.com</p>
+                  <p className="font-semibold">+254 715 244 974</p>
                 </div>
               </div>
               <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
@@ -501,7 +501,7 @@ export default function Enrollment() {
                 Thank you for your application. We've received your information and will review it shortly. You'll receive a confirmation email at <strong>{formData.email}</strong> with further instructions.
               </p>
               <p className="text-muted-foreground mb-8">
-                Our admissions team typically responds within 5-7 business days. If you have any questions, feel free to contact us at <strong>admissions@aitec.edu</strong>.
+                Our admissions team typically responds within 5-7 business days. If you have any questions, feel free to contact us at <strong>aitec.mogotio@gmail.com</strong>.
               </p>
               <Button asChild className="bg-primary hover:bg-primary/90">
                 <a href="/">Return to Home</a>

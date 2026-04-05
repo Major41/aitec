@@ -186,11 +186,11 @@ export default function Resources() {
               Call: +254715244974
             </a>
             <a
-              href="mailto:admissions@aitec.edu"
+              href="mailto:aitec.mogotio@gmail.com"
               className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-white hover:bg-gray-100 text-primary rounded-lg font-semibold transition-all"
             >
               <Mail className="w-5 h-5" />
-              Email: admissions@aitec.edu
+              Email: aitec.mogotio@gmail.com
             </a>
           </div>
         </div>
