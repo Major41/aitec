@@ -1,34 +1,41 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ChevronRight, Check } from 'lucide-react';
-import { AITEC_DATA } from '@/lib/constants';
+import Image from "next/image";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ChevronRight, Check, Wrench } from "lucide-react";
+import { AITEC_DATA } from "@/lib/constants";
 
 export default function Enrollment() {
+  // Show maintenance mode - set to true to show maintenance message, false to show form
+  const MAINTENANCE_MODE = true;
+
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     // Personal Information
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    dateOfBirth: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    dateOfBirth: "",
     // Academic Information
-    highestEducation: '',
-    university: '',
-    gpa: '',
+    highestEducation: "",
+    university: "",
+    gpa: "",
     // Program Selection
-    program: '',
+    program: "",
     // Additional
-    country: '',
-    city: '',
+    country: "",
+    city: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -43,20 +50,85 @@ export default function Enrollment() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Application submitted:', formData);
+    console.log("Application submitted:", formData);
     setSubmitted(true);
   };
 
   const steps = [
-    { number: 1, title: 'Personal Info', description: 'Basic details' },
-    { number: 2, title: 'Education', description: 'Academic background' },
-    { number: 3, title: 'Program', description: 'Choose program' },
-    { number: 4, title: 'Review', description: 'Confirm details' },
+    { number: 1, title: "Personal Info", description: "Basic details" },
+    { number: 2, title: "Education", description: "Academic background" },
+    { number: 3, title: "Program", description: "Choose program" },
+    { number: 4, title: "Review", description: "Confirm details" },
   ];
 
+  // Show maintenance message if MAINTENANCE_MODE is true
+  if (MAINTENANCE_MODE) {
+    return (
+      <div className="w-full">
+        {/* Page Header with Background Image */}
+        <section className="relative py-24 md:py-32 overflow-hidden">
+          <div className="absolute inset-0 -z-10">
+            <Image
+              src="/images/hero-2.jpg"
+              alt="Enrollment background"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-black/70" />
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
+              Enrollment Page
+            </h1>
+            <p className="text-xl text-gray-100 max-w-2xl mx-auto">
+              We're preparing something great for you
+            </p>
+          </div>
+        </section>
+
+        {/* Maintenance Message */}
+        <section className="py-24 md:py-32 bg-background">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-muted/50 rounded-lg border border-border p-12">
+              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Wrench size={40} className="text-primary" />
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Page Under Maintenance
+              </h2>
+              <p className="text-lg text-muted-foreground mb-6">
+                Our enrollment system is currently being upgraded to serve you
+                better.
+              </p>
+              <div className="space-y-4 text-muted-foreground">
+                <p>
+                  We're working hard to improve the application process. The
+                  enrollment form will be back online shortly.
+                </p>
+                <p>
+                  In the meantime, if you have any questions about admissions,
+                  please contact us at:
+                </p>
+                <div className="pt-4">
+                  <p className="font-semibold">📧 admissions@aitec.edu</p>
+                  <p className="font-semibold">📞 +1 (555) 123-4567</p>
+                </div>
+              </div>
+              <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
+                <a href="/">Return to Home</a>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  // Original form code below (commented out but preserved)
+  /*
   return (
     <div className="w-full">
-      {/* Page Header with Background Image */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
@@ -76,12 +148,10 @@ export default function Enrollment() {
         </div>
       </section>
 
-      {/* Enrollment Form */}
       <section className="py-24 md:py-32 bg-background">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {!submitted ? (
             <>
-              {/* Progress Steps */}
               <div className="mb-12">
                 <div className="flex justify-between items-start">
                   {steps.map((s, index) => (
@@ -117,9 +187,7 @@ export default function Enrollment() {
                 </div>
               </div>
 
-              {/* Form Content */}
               <form onSubmit={handleSubmit} className="bg-muted/50 rounded-lg border border-border p-8 md:p-12">
-                {/* Step 1: Personal Information */}
                 {step === 1 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold">Personal Information</h2>
@@ -209,7 +277,6 @@ export default function Enrollment() {
                   </div>
                 )}
 
-                {/* Step 2: Education */}
                 {step === 2 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold">Educational Background</h2>
@@ -266,7 +333,6 @@ export default function Enrollment() {
                   </div>
                 )}
 
-                {/* Step 3: Program Selection */}
                 {step === 3 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold">Choose Your Program</h2>
@@ -328,7 +394,6 @@ export default function Enrollment() {
                   </div>
                 )}
 
-                {/* Step 4: Review */}
                 {step === 4 && (
                   <div className="space-y-8">
                     <h2 className="text-2xl font-bold">Review Your Application</h2>
@@ -396,7 +461,6 @@ export default function Enrollment() {
                   </div>
                 )}
 
-                {/* Navigation Buttons */}
                 <div className="flex gap-4 mt-12 justify-between">
                   <Button
                     type="button"
@@ -448,4 +512,9 @@ export default function Enrollment() {
       </section>
     </div>
   );
+  */
+
+  // Return null or a loading state while in maintenance mode
+  // The maintenance message is rendered by the if statement above
+  return null;
 }
