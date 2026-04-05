@@ -43,6 +43,13 @@ export function EnhancedHero() {
         {/* Content - Positioned absolutely inside hero */}
         <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16 z-10">
           <div className="max-w-4xl space-y-4">
+            {/* School Name - Added above the title */}
+            <div className="mb-2">
+              <p className="text-white bg-primary w-max py-1 px-2 rounded-xl font-semibold text-sm md:text-base tracking-wide">
+                African International Technical College (AITEC)
+              </p>
+            </div>
+
             {/* News Title */}
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
               {currentEvent.title}
@@ -72,6 +79,12 @@ export function EnhancedHero() {
               <Button
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold cursor-pointer"
+                onClick={() => {
+                  window.open(
+                    "https://docs.google.com/forms/d/1fsxXD7QWgGgVgLlCdZ0HWpfL5mPj0zmwv_31bzjFLXA/edit?usp=mail_response_notification",
+                    "_blank",
+                  );
+                }}
               >
                 Enroll Now
               </Button>
