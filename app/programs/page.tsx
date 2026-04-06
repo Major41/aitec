@@ -21,14 +21,27 @@ interface School {
 
 async function getSchoolsWithCourses(): Promise<School[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? `https://${process.env.NEXT_PUBLIC_BASE_URL}` : 'http://localhost:3000';
+    let baseUrl: string;
+
+    if (process.env.NEXT_PUBLIC_BASE_URL) {
+      const envUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      // Check if protocol already exists
+      if (envUrl.startsWith("http://") || envUrl.startsWith("https://")) {
+        baseUrl = envUrl;
+      } else {
+        baseUrl = `https://${envUrl}`;
+      }
+    } else {
+      baseUrl = "http://localhost:3000";
+    }
+
     const response = await fetch(`${baseUrl}/api/public/schools-with-courses`, {
       next: { revalidate: 1800 },
     });
     if (!response.ok) return [];
     return await response.json();
   } catch (error) {
-    console.error('Error fetching schools:', error);
+    console.error("Error fetching schools:", error);
     return [];
   }
 }
