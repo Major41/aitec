@@ -4,7 +4,7 @@ import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-background">
+    <div className="md:py-32 py-16 w-full flex items-center justify-center bg-background">
       <div className="max-w-md text-center space-y-8 px-4">
         {/* 404 Text */}
         <div className="space-y-2">
@@ -17,7 +17,7 @@ export default function NotFound() {
         </div>
 
         {/* Illustration */}
-        <div className="py-8">
+        <div className="p2-8">
           <div className="text-6xl opacity-20">🔍</div>
         </div>
 
