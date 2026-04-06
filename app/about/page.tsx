@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { PartnersCarousel } from '@/components/partners-carousel';
+
 import Link from "next/link";
 import { CampusGallery } from "@/components/campus-gallery";
 import {
@@ -68,6 +70,8 @@ export default function About() {
           </div>
         </div>
       </section>
+            <PartnersCarousel />
+
 
       {/* Who We Are Section */}
       <section className="py-24 md:py-32 bg-background">
@@ -114,6 +118,8 @@ export default function About() {
           </div>
         </div>
       </section>
+
+      
 
       {/* Inception Section */}
       <section className="py-24 md:py-32 bg-muted/50">
