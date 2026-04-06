@@ -1,10 +1,6 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Course {
   _id: string;
@@ -23,74 +19,45 @@ interface School {
   courses?: Course[];
 }
 
-export default function ProgramsPage() {
-  const [schools, setSchools] = useState<School[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchSchools();
-  }, []);
-
-  const fetchSchools = async () => {
-    try {
-      const res = await fetch("/api/public/schools");
-      if (res.ok) {
-        const schoolsData = await res.json();
-
-        // Fetch courses for each school
-        const schoolsWithCourses = await Promise.all(
-          schoolsData.map(async (school: School) => {
-            const coursesRes = await fetch(
-              `/api/public/schools/${school.slug}/courses`,
-            );
-            if (coursesRes.ok) {
-              const data = await coursesRes.json();
-              return { ...school, courses: data.courses };
-            }
-            return school;
-          }),
-        );
-
-        setSchools(schoolsWithCourses);
-      }
-    } catch (error) {
-      console.error("Error fetching schools:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    );
+async function getSchoolsWithCourses(): Promise<School[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? `https://${process.env.NEXT_PUBLIC_BASE_URL}` : 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/public/schools-with-courses`, {
+      next: { revalidate: 1800 },
+    });
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching schools:', error);
+    return [];
   }
+}
+
+export default async function ProgramsPage() {
+  const schools = await getSchoolsWithCourses();
 
   return (
-    <div className="w-full">
+    <div>
       <section className="relative py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <Image
-            src="/kmtc.jpg"
-            alt="Gallery background"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black/50" />
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">
-            Our Academic Programs
-          </h1>
-          <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-            Explore world-class technical education across our specialized
-            schools
-          </p>
-        </div>
-      </section>
+              <div className="absolute inset-0 -z-10">
+                <Image
+                  src="/kmtc.jpg"
+                  alt="Gallery background"
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-black/50" />
+              </div>
+      
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+                <h1 className="text-5xl md:text-6xl font-bold mb-4">
+                  Our Programs
+                </h1>
+                <p className="text-xl text-gray-100 max-w-2xl mx-auto">
+                 Explore world-class technical education across our specialized schools
+                </p>
+              </div>
+            </section>
 
       {/* Schools and Courses */}
       <section className="py-20 md:py-32 bg-background">
@@ -100,9 +67,7 @@ export default function ProgramsPage() {
               <div key={school._id} className="space-y-12">
                 {/* School Header */}
                 <div className="space-y-4 border-b border-border pb-8">
-                  <h2 className="text-3xl md:text-4xl font-bold">
-                    {school.name}
-                  </h2>
+                  <h2 className="text-3xl md:text-4xl font-bold">{school.name}</h2>
                   <p className="text-lg text-muted-foreground max-w-3xl">
                     {school.description}
                   </p>
@@ -151,9 +116,7 @@ export default function ProgramsPage() {
                     ))
                   ) : (
                     <div className="col-span-full text-center py-12">
-                      <p className="text-muted-foreground">
-                        No courses available for this school yet.
-                      </p>
+                      <p className="text-muted-foreground">No courses available for this school yet.</p>
                     </div>
                   )}
                 </div>
@@ -166,9 +129,7 @@ export default function ProgramsPage() {
 
           {schools.length === 0 && (
             <div className="text-center py-20">
-              <p className="text-lg text-muted-foreground">
-                No programs available at this time.
-              </p>
+              <p className="text-lg text-muted-foreground">No programs available at this time.</p>
             </div>
           )}
         </div>
@@ -180,8 +141,7 @@ export default function ProgramsPage() {
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl font-bold">Ready to Enroll?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Start your application today and take the first step toward your
-              future.
+              Start your application today and take the first step toward your future.
             </p>
           </div>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90">

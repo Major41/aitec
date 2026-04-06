@@ -1,12 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Spinner } from "@/components/ui/spinner";
-import { ArrowLeft } from "lucide-react";
 
 interface Course {
   _id: string;
@@ -24,49 +18,52 @@ interface School {
   image: string;
 }
 
-export default function SchoolCoursesPage() {
-  const params = useParams() as { schoolSlug: string };
-  const { schoolSlug } = params;
-  const [school, setSchool] = useState<School | null>(null);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchSchoolAndCourses = async () => {
-      try {
-        const [schoolRes, coursesRes] = await Promise.all([
-          fetch(`/api/public/schools/${schoolSlug}`),
-          fetch(`/api/public/schools/${schoolSlug}/courses`),
-        ]);
-
-        if (schoolRes.ok) {
-          const schoolData = await schoolRes.json();
-          setSchool(schoolData);
-        }
-
-        if (coursesRes.ok) {
-          const coursesData = await coursesRes.json();
-          setCourses(coursesData.courses || []);
-        }
-      } catch (error) {
-        console.error("Error fetching school data:", error);
-      } finally {
-        setLoading(false);
+async function getSchoolAndCourses(schoolSlug: string) {
+  try {
+    let baseUrl;
+    if (process.env.NEXT_PUBLIC_BASE_URL) {
+      // Check if the env var already includes protocol
+      const envUrl = process.env.NEXT_PUBLIC_BASE_URL;
+      if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
+        baseUrl = envUrl;
+      } else {
+        baseUrl = `https://${envUrl}`;
       }
-    };
-
-    if (schoolSlug) {
-      fetchSchoolAndCourses();
+    } else {
+      baseUrl = "http://localhost:3000";
     }
-  }, [schoolSlug]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner />
-      </div>
-    );
+    const [schoolRes, coursesRes] = await Promise.all([
+      fetch(`${baseUrl}/api/public/schools/${schoolSlug}`, {
+        next: { revalidate: 3600 },
+      }),
+      fetch(`${baseUrl}/api/public/schools/${schoolSlug}/courses`, {
+        next: { revalidate: 3600 },
+      }),
+    ]);
+    
+    const schoolData = schoolRes.ok ? await schoolRes.json() : null;
+    const coursesData = coursesRes.ok
+      ? await coursesRes.json()
+      : { courses: [] };
+
+    return {
+      school: schoolData,
+      courses: coursesData.courses || [],
+    };
+  } catch (error) {
+    console.error("Error fetching school data:", error);
+    return { school: null, courses: [] };
   }
+}
+
+export default async function SchoolCoursesPage({
+  params,
+}: {
+  params: Promise<{ schoolSlug: string }>;
+}) {
+  const { schoolSlug } = await params;
+  const { school, courses } = await getSchoolAndCourses(schoolSlug);
 
   if (!school) {
     return (
@@ -121,6 +118,16 @@ export default function SchoolCoursesPage() {
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   {school.description}
                 </p>
+              </div>
+
+              <div className="flex gap-4">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  <a href="#courses">Explore Courses</a>
+                </Button>
               </div>
             </div>
           </div>
