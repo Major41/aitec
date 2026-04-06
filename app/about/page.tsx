@@ -69,6 +69,7 @@ export default function About() {
             </div>
           </div>
         </div>
+        
       </section>
             <PartnersCarousel />
 
@@ -160,9 +161,9 @@ export default function About() {
 
                   <div className="flex justify-between items-center">
                     <span className="text-muted-foreground">
-                      September 2023
+                      May 2024
                     </span>
-                    <span className="font-bold">+128 Students</span>
+                    <span className="font-bold">300+ Students</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
@@ -172,8 +173,8 @@ export default function About() {
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">January 2024</span>
-                    <span className="font-bold">+100 Students</span>
+                    <span className="text-muted-foreground">May 2024</span>
+                    <span className="font-bold">700+ Students</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
@@ -183,8 +184,8 @@ export default function About() {
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground">May 2024</span>
-                    <span className="font-bold">300+ Students</span>
+                    <span className="text-muted-foreground">April 2024</span>
+                    <span className="font-bold">1500+ Students</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2">
                     <div
@@ -339,7 +340,7 @@ export default function About() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-6">Welcome to AITEC</h2>
           <p className="text-2xl font-semibold mb-4">
-            WHERE WE NURTURE CREATIVE PROFESSIONALS!
+            NURTURING CREATIVE PROFESSIONALS!
           </p>
           <div className="w-24 h-1 bg-white mx-auto mt-8"></div>
         </div>
@@ -407,11 +408,11 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-5xl font-bold mb-2">300+</div>
+              <div className="text-5xl font-bold mb-2">1500+</div>
               <p className="text-primary-foreground/80">Current Students</p>
             </div>
             <div>
-              <div className="text-5xl font-bold mb-2">40+</div>
+              <div className="text-5xl font-bold mb-2">50+</div>
               <p className="text-primary-foreground/80">Qualified Faculty</p>
             </div>
             <div>

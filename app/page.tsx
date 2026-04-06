@@ -40,55 +40,8 @@ export default async function Home() {
     <>
       <EnhancedHero />
 
-  <section className="py-8 md:py-8 bg-background">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-        {/* LEFT SIDE */}
-        <div className="space-y-6">
-          {/* Logo */}
-          <img 
-            src="/logo.jpeg" 
-            alt="AITEC Logo" 
-            className="w-20 h-20 object-contain"
-          />
-
-          {/* School Name */}
-          <h2 className="text-4xl font-bold">
-            African International Technical College (AITEC)
-          </h2>
-
-          {/* CTA Button */}
-          <a
-            href="/programs"
-            className="inline-block bg-primary text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition"
-          >
-            Main Courses
-          </a>
-        </div>
-
-        {/* RIGHT SIDE */}
-        <div>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            African International Technical College (AITEC) is a premier
-            educational institution dedicated to providing cutting-edge
-            education in technology and engineering fields. With a
-            commitment to excellence, AITEC aims to nurture a new generation
-            of professionals equipped with the skills and knowledge
-            necessary to thrive in today's rapidly evolving technological
-            landscape.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <CoursesSection />
-  <FeaturesSection />
-
       {/* Featured Programs Section */}
-      <section className="w-full py-24 md:py-32 bg-background">
+      <section className="w-full py-10 md:py-10 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -131,6 +84,52 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <CoursesSection />
+
+      <section className="py-8 md:py-8 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* LEFT SIDE */}
+            <div className="space-y-6">
+              {/* Logo */}
+              <img
+                src="/logo.jpeg"
+                alt="AITEC Logo"
+                className="w-20 h-20 object-contain"
+              />
+
+              {/* School Name */}
+              <h2 className="text-4xl font-bold">
+                African International Technical College (AITEC)
+              </h2>
+
+              {/* CTA Button */}
+              <a
+                href="/programs"
+                className="inline-block bg-primary text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition"
+              >
+                Main Courses
+              </a>
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                African International Technical College (AITEC) is a premier
+                educational institution dedicated to providing cutting-edge
+                education in technology and engineering fields. With a
+                commitment to excellence, AITEC aims to nurture a new generation
+                of professionals equipped with the skills and knowledge
+                necessary to thrive in today's rapidly evolving technological
+                landscape.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <FeaturesSection />
 
       <TestimonialsSection />
 

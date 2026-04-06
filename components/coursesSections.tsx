@@ -16,7 +16,7 @@ export default function CoursesSections() {
         </div>
 
         {/* Content */}
-        <div className="flex items-center bg-blue-200 px-6 md:px-16 py-12">
+        <div className="flex items-center bg-gray-100 px-6 md:px-16 py-12">
           <div className="max-w-lg space-y-5">
             <h2 className="text-2xl md:text-4xl font-bold">
               Study In Kenya, Work In Australia
@@ -46,7 +46,7 @@ export default function CoursesSections() {
       {/* Section 2 */}
       <div className="grid md:grid-cols-2 min-h-[400px]">
         {/* Content */}
-        <div className="flex items-center bg-blue-200 px-6 md:px-16 py-12 order-2 md:order-1">
+        <div className="flex items-center bg-gray-100 px-6 md:px-16 py-12 order-2 md:order-1">
           <div className="max-w-lg space-y-5">
             <h2 className="text-2xl md:text-4xl font-bold">Build Your Future in Kenya</h2>
 

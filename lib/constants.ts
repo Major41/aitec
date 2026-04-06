@@ -1034,7 +1034,7 @@ export const AITEC_DATA = {
       location: "Innovation Lab",
       type: "students",
       description:
-        "Join us for our May intake enrollment, where prospective students can meet faculty, tour the campus, and learn about our programs and scholarships.",
+        "Join us for our May intake enrollment. Prospective students can meet faculty, tour the campus and learn about our programs and scholarships.",
       image: "/kmtc2.jpg",
       status: "upcoming",
     },

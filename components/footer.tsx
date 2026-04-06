@@ -21,9 +21,10 @@ export function Footer() {
               />
             </div>
             <p className="text-sm opacity-90">
-              African International Technical College, is a premier educational
-              institution dedicated to providing cutting-edge education in
-              technology and engineering fields.
+              African International Technical College, is a premier technical
+              educational institution dedicated to providing cutting-edge
+              education in health, agriculture, technology and engineering
+              fields.
             </p>
           </div>
 
@@ -70,12 +71,12 @@ export function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a href="/programs" className="hover:opacity-80 transition">
-                  Signet Australia
+                  Health & Applied Sciences
                 </a>
               </li>
               <li>
                 <a href="/programs" className="hover:opacity-80 transition">
-                  Animal Health
+                  Animal Health & Agriculture
                 </a>
               </li>
               <li>
@@ -85,17 +86,22 @@ export function Footer() {
               </li>
               <li>
                 <a href="/programs" className="hover:opacity-80 transition">
+                  Hospitality & Liberal Studies
+                </a>
+              </li>
+              <li>
+                <a href="/programs" className="hover:opacity-80 transition">
                   Business & ICT
                 </a>
               </li>
               <li>
                 <a href="/programs" className="hover:opacity-80 transition">
-                  Hospitality & Liberal Science
+                  Signet Institute of Australia
                 </a>
               </li>
               <li>
                 <a href="/programs" className="hover:opacity-80 transition">
-                  Health & Applied Sciences
+                  Recognition of Prior Learning (RPL)
                 </a>
               </li>
             </ul>
@@ -107,11 +113,11 @@ export function Footer() {
             <div className="space-y-3 text-sm">
               <div className="flex gap-2">
                 <MapPin size={18} className="flex-shrink-0 mt-0.5" />
-                <p>Mogotio</p>
+                <p>Mogotio - 38km North of Nakuru City <br/> P.O BOX 12938 Nakuru - 20100 </p>
               </div>
               <div className="flex gap-2">
                 <Phone size={18} className="flex-shrink-0 mt-0.5" />
-                <p>+254715244974</p>
+                <p>0715244974 / 0726854256 <br/> 0741121599 / 0706278051 </p>
               </div>
               <div className="flex gap-2">
                 <Mail size={18} className="flex-shrink-0 mt-0.5" />
