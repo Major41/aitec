@@ -9,9 +9,9 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AITEC - Advanced Institute of Technology and Engineering",
+  title: "AITEC - African International Technical College",
   description:
-    "AITEC offers world-class engineering and technology education programs designed to shape the next generation of innovators and leaders.",
+    "African International Technical College (AITEC) is a premier educational institution dedicated to providing cutting-edge education in technology and engineering fields.",
   generator: "v0.app",
   icons: {
     icon: [
