@@ -1,91 +1,64 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { useState } from 'react';
-import { AITEC_DATA } from '@/lib/constants';
-import { BlogCard } from '@/components/blog-card';
-import { Search } from 'lucide-react';
+import Image from "next/image";
+import { useState, useEffect } from "react";
+import { Search } from "lucide-react";
+
+interface Sport {
+  _id: string;
+  title: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  date: string;
+}
 
 export default function Sports() {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [sports, setSports] = useState<Sport[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Mock sports data - replace with actual data from API
-  const sportsUpdates = [
-    {
-      id: 1,
-      title: 'Football Team Wins Championship',
-      excerpt: 'Our football team clinched the regional championship with an outstanding performance.',
-      content: 'Our football team clinched the regional championship with an outstanding performance against top competitors.',
-      category: 'Football',
-      date: '2024-04-10',
-      image: '/images/sports-1.jpg',
-      featured: true,
-      author: 'Sports Team',
-    },
-    {
-      id: 2,
-      title: 'Basketball Tournament Success',
-      excerpt: 'AITEC basketball team advances to the finals with impressive victories.',
-      content: 'AITEC basketball team advances to the finals with impressive victories in the preliminary rounds.',
-      category: 'Basketball',
-      date: '2024-04-08',
-      image: '/images/sports-2.jpg',
-      featured: true,
-      author: 'Sports Team',
-    },
-    {
-      id: 3,
-      title: 'Cricket Inter-College Series',
-      excerpt: 'Students participate in the annual inter-college cricket series.',
-      content: 'Our students participate in the annual inter-college cricket series, showcasing their skills and team spirit.',
-      category: 'Cricket',
-      date: '2024-04-05',
-      image: '/images/sports-3.jpg',
-      featured: false,
-      author: 'Sports Team',
-    },
-    {
-      id: 4,
-      title: 'Volleyball Team Dominates League',
-      excerpt: 'Women\'s volleyball team maintains unbeaten streak this season.',
-      content: 'Women\'s volleyball team maintains unbeaten streak this season with consistent performances.',
-      category: 'Volleyball',
-      date: '2024-04-03',
-      image: '/images/sports-4.jpg',
-      featured: false,
-      author: 'Sports Team',
-    },
-  ];
+  useEffect(() => {
+    fetchSports();
+  }, []);
 
-  const categories = ['all', 'Football', 'Basketball', 'Cricket', 'Volleyball'];
+  const fetchSports = async () => {
+    try {
+      const response = await fetch("/api/public/sports");
+      if (response.ok) {
+        const data = await response.json();
+        setSports(data);
+      }
+    } catch (error) {
+      console.error("Error fetching sports:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  let filteredUpdates = sportsUpdates;
+  const categories = ["All", ...new Set(sports.map((s) => s.category))];
 
-  // Filter by category
-  if (selectedCategory !== 'all') {
-    filteredUpdates = filteredUpdates.filter((update) => update.category === selectedCategory);
+  const filteredSports = sports.filter((sport) => {
+    const matchCategory =
+      selectedCategory === "all" || sport.category === selectedCategory;
+    const matchSearch = sport.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchCategory && matchSearch;
+  });
+
+  if (loading) {
+    return <div className="py-20 text-center">Loading sports updates...</div>;
   }
-
-  // Filter by search query
-  if (searchQuery.trim()) {
-    filteredUpdates = filteredUpdates.filter(
-      (update) =>
-        update.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        update.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }
-
-  const featuredUpdates = filteredUpdates.filter((update) => update.featured);
-  const otherUpdates = filteredUpdates.filter((update) => !update.featured);
 
   return (
     <div className="w-full">
-      {/* Page Header with Background Image */}
+      {/* Page Header */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
-            src="/coastal.jpg"
+            src="/images/hero-4.jpg"
             alt="Sports background"
             fill
             className="object-cover"
@@ -101,13 +74,15 @@ export default function Sports() {
         </div>
       </section>
 
-      {/* Search and Filter Section */}
+      {/* Search and Filter */}
       <section className="py-12 bg-muted">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Search Bar */}
           <div className="mb-8">
             <div className="relative">
-              <Search className="absolute left-4 top-3 text-muted-foreground" size={20} />
+              <Search
+                className="absolute left-4 top-3 text-muted-foreground"
+                size={20}
+              />
               <input
                 type="text"
                 placeholder="Search sports updates..."
@@ -118,107 +93,75 @@ export default function Sports() {
             </div>
           </div>
 
-          {/* Category Filter */}
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
               <button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() =>
+                  setSelectedCategory(category === "All" ? "all" : category)
+                }
                 className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-primary text-white'
-                    : 'bg-background border border-border text-foreground hover:bg-background'
+                  (category === "All" && selectedCategory === "all") ||
+                  (category !== "All" && selectedCategory === category)
+                    ? "bg-primary text-white"
+                    : "bg-background border border-border text-foreground hover:bg-background"
                 }`}
               >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
+                {category}
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Sports Updates */}
-      {featuredUpdates.length > 0 && (
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12">Featured Updates</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {featuredUpdates.map((update) => (
+      {/* Sports Updates Grid */}
+      <section className="py-16 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {filteredSports.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                No sports updates found.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredSports.map((sport) => (
                 <div
-                  key={update.id}
-                  className="group rounded-lg overflow-hidden border border-border hover:shadow-lg transition-all"
+                  key={sport._id}
+                  className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-300 bg-card flex flex-col h-full"
                 >
-                  <div className="relative h-64 overflow-hidden">
-                    <Image
-                      src={update.image}
-                      alt={update.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-semibold text-primary">{update.category}</span>
-                      <span className="text-sm text-muted-foreground">{update.date}</span>
+                  {sport.image && (
+                    <div className="relative h-48 w-full overflow-hidden bg-muted">
+                      <Image
+                        src={sport.image}
+                        alt={sport.title}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{update.title}</h3>
-                    <p className="text-muted-foreground mb-4">{update.excerpt}</p>
-                    <a href="#" className="text-primary font-medium hover:underline">
-                      Read More →
-                    </a>
+                  )}
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
+                        {sport.category}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(sport.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold mb-2 line-clamp-2">
+                      {sport.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm flex-1 line-clamp-3">
+                      {sport.excerpt}
+                    </p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Other Sports Updates */}
-      {otherUpdates.length > 0 && (
-        <section className="py-16 bg-muted">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12">More Updates</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {otherUpdates.map((update) => (
-                <div
-                  key={update.id}
-                  className="group rounded-lg overflow-hidden border border-border bg-background hover:shadow-lg transition-all"
-                >
-                  <div className="relative h-48 overflow-hidden">
-                    <Image
-                      src={update.image}
-                      alt={update.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-semibold text-primary">{update.category}</span>
-                      <span className="text-xs text-muted-foreground">{update.date}</span>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{update.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{update.excerpt}</p>
-                    <a href="#" className="text-primary text-sm font-medium hover:underline">
-                      Read More →
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* No Results */}
-      {filteredUpdates.length === 0 && (
-        <section className="py-16 bg-background">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-lg text-muted-foreground">No sports updates found. Try adjusting your filters.</p>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
     </div>
   );
 }
