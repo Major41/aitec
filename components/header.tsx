@@ -20,7 +20,7 @@ export function Header() {
     { href: "/contact", label: "Contact" },
   ];
 
-  const contactNumbers = ["+1 (555) 123-4567", "+1 (555) 987-6543"];
+  const contactNumbers = ["+254 715 244 974", "+254 726 854 256"];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
