@@ -352,7 +352,6 @@ export default function CoursesPage() {
             <TableRow>
               <TableHead>Title</TableHead>
               <TableHead>School</TableHead>
-              <TableHead>Slug</TableHead>
               <TableHead>Description</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -362,7 +361,6 @@ export default function CoursesPage() {
               <TableRow key={course._id}>
                 <TableCell className="font-medium">{course.title}</TableCell>
                 <TableCell>{course.schoolId?.name || "N/A"}</TableCell>
-                <TableCell>{course.slug}</TableCell>
                 <TableCell className="max-w-md truncate">
                   {course.description}
                 </TableCell>
