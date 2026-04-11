@@ -13,13 +13,14 @@ export function Header() {
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
     { href: "/programs", label: "Programs" },
-    { href: "/resources", label: "Resources" },
+    { href: '/facilities', label: 'Facilities' },
+    { href: "/sports", label: "Sports" },
     { href: "/gallery", label: "Gallery" },
     { href: "/blogs", label: "Blogs" },
     { href: "/contact", label: "Contact" },
   ];
 
-  const contactNumbers = ["+254 715 244 974", "+254 726 854 256"];
+  const contactNumbers = ["+1 (555) 123-4567", "+1 (555) 987-6543"];
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
@@ -28,8 +29,8 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-2 gap-4">
             {/* School Name */}
-            <h1 className="text-sm sm:text-base font-semibold text-red-600">
-              AFRICAN INTERNATIONAL TECHNICAL COLLEGE
+            <h1 className="text-sm sm:text-base font-semibold text-foreground">
+              Signet Institute of Australia
             </h1>
 
             {/* Contact Info - Hidden on Mobile */}
@@ -72,7 +73,7 @@ export function Header() {
                   priority
                 />
               </div>
-              <span className="font-bold text-lg sm:text-xl text-red-600">
+              <span className="font-bold text-lg sm:text-xl text-primary">
                 AITEC
               </span>
             </Link>

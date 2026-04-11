@@ -46,6 +46,7 @@ export interface ICourse extends Document {
   description: string;
   fullDescription: string;
   images: string[];
+  categories: string[];
   duration?: string;
   level?: string;
   createdAt: Date;
@@ -60,6 +61,7 @@ const CourseSchema = new Schema<ICourse>(
     description: { type: String, required: true },
     fullDescription: { type: String, required: true },
     images: [{ type: String }],
+    categories: [{ type: String, enum: ["Diploma", "Certificate", "Artisan"] }],
     duration: { type: String },
     level: { type: String },
   },

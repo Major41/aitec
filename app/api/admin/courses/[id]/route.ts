@@ -16,7 +16,7 @@ async function verifyAuth(request: NextRequest) {
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // ← Mark as Promise
 ) {
   const auth = await verifyAuth(request);
   if (!auth)
@@ -25,13 +25,15 @@ export async function PUT(
   try {
     await connectDB();
     const body = await request.json();
+    const { id } = await params; // ← Await params first
+
     const slug = body.title
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^a-z0-9-]/g, "");
 
     const course = await Course.findByIdAndUpdate(
-      params.id,
+      id, // ← Use the unwrapped id
       {
         title: body.title,
         slug,
@@ -39,10 +41,11 @@ export async function PUT(
         description: body.description,
         fullDescription: body.fullDescription,
         images: body.images,
+        categories: body.categories || [],
         duration: body.duration,
         level: body.level,
       },
-      { new: true },
+      { new: true, returnDocument: "after" }, // ← Fix deprecation warning
     );
 
     if (!course)
@@ -55,7 +58,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> }, // ← Mark as Promise
 ) {
   const auth = await verifyAuth(request);
   if (!auth)
@@ -63,7 +66,8 @@ export async function DELETE(
 
   try {
     await connectDB();
-    const course = await Course.findByIdAndDelete(params.id);
+    const { id } = await params; // ← Await params first
+    const course = await Course.findByIdAndDelete(id); // ← Use unwrapped id
 
     if (!course)
       return NextResponse.json({ error: "Course not found" }, { status: 404 });

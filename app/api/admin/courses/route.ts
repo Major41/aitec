@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
       description: body.description,
       fullDescription: body.fullDescription,
       images: body.images || [],
+      categories: body.categories || [],
       duration: body.duration,
       level: body.level,
     });

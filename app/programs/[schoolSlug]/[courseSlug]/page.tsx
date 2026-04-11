@@ -15,6 +15,7 @@ interface Course {
   description: string;
   fullDescription: string;
   images: string[];
+  categories?: string[];
   duration?: string;
   level?: string;
   schoolId: {
@@ -112,6 +113,21 @@ export default function CourseDetailPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-balance">
                 {course.title}
               </h1>
+
+              {/* Categories */}
+              {course.categories && course.categories.length > 0 && (
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {course.categories.map((category) => (
+                    <span
+                      key={category}
+                      className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-primary/20 text-primary"
+                    >
+                      {category}
+                    </span>
+                  ))}
+                </div>
+              )}
+
               <div className="flex flex-wrap gap-4">
                 {course.level && (
                   <div className="flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-full">

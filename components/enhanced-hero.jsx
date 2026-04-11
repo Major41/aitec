@@ -107,19 +107,15 @@ export function EnhancedHero() {
               >
                 Download Brochure
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 bg-transparent backdrop-blur-sm hover:bg-white/10 text-white border-white/40 hover:border-white/60 transition-all duration-300 cursor-pointer"
-                onClick={() => {
-                  window.open(
-                    "https://docs.google.com/forms/d/1fsxXD7QWgGgVgLlCdZ0HWpfL5mPj0zmwv_31bzjFLXA/edit?usp=mail_response_notification",
-                    "_blank",
-                  );
-                }}
-              >
-                Enroll Now
-              </Button>
+             <Link href="/enrollment">
+  <Button
+    size="lg"
+    variant="outline"
+    className="text-lg px-8 bg-transparent backdrop-blur-sm hover:bg-white/10 text-white border-white/40 hover:border-white/60 transition-all duration-300 cursor-pointer"
+  >
+    Enroll Now
+  </Button>
+</Link>
             </motion.div>
 
             {/* Special Scholarship Offer - Comfy Inn Style */}

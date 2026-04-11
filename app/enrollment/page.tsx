@@ -1,134 +1,127 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronRight, Check, Wrench } from "lucide-react";
-import { AITEC_DATA } from "@/lib/constants";
+import { ChevronRight, Check } from "lucide-react";
+
+interface School {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+interface Course {
+  _id: string;
+  title: string;
+  slug: string;
+}
 
 export default function Enrollment() {
-  // Show maintenance mode - set to true to show maintenance message, false to show form
-  const MAINTENANCE_MODE = true;
-
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
+  const [schools, setSchools] = useState<School[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [formData, setFormData] = useState({
-    // Personal Information
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     dateOfBirth: "",
-    // Academic Information
     highestEducation: "",
     university: "",
-    gpa: "",
-    // Program Selection
-    program: "",
-    // Additional
-    country: "",
-    city: "",
+    school: "",
+    course: "",
   });
 
+  useEffect(() => {
+    fetchSchools();
+  }, []);
+
+  const fetchSchools = async () => {
+    try {
+      const response = await fetch("/api/public/schools");
+      if (response.ok) {
+        const data = await response.json();
+        setSchools(data);
+      }
+    } catch (error) {
+      console.error("Error fetching schools:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCourses = async (schoolId: string) => {
+    try {
+      if (!schoolId) {
+        setCourses([]);
+        return;
+      }
+      const response = await fetch(`/api/public/courses?schoolId=${schoolId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setCourses(data);
+      } else {
+        setCourses([]);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+      setCourses([]);
+    }
+  };
+
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "school") {
+      setFormData((prev) => ({ ...prev, course: "" }));
+      fetchCourses(value);
+    }
   };
 
   const handleNext = () => {
-    if (step < 4) setStep(step + 1);
+    if (step < 3) setStep(step + 1);
   };
 
   const handlePrev = () => {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Application submitted:", formData);
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/public/enroll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        console.error("Enrollment submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting enrollment:", error);
+    }
   };
 
   const steps = [
     { number: 1, title: "Personal Info", description: "Basic details" },
     { number: 2, title: "Education", description: "Academic background" },
     { number: 3, title: "Program", description: "Choose program" },
-    { number: 4, title: "Review", description: "Confirm details" },
   ];
 
-  // Show maintenance message if MAINTENANCE_MODE is true
-  if (MAINTENANCE_MODE) {
-    return (
-      <div className="w-full">
-        {/* Page Header with Background Image */}
-        <section className="relative py-24 md:py-32 overflow-hidden">
-          <div className="absolute inset-0 -z-10">
-            <Image
-              src="/enroll.jpg"
-              alt="Enrollment background"
-              fill
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-black/70" />
-          </div>
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              Enrollment Page
-            </h1>
-            <p className="text-xl text-gray-100 max-w-2xl mx-auto">
-              We're preparing something great for you
-            </p>
-          </div>
-        </section>
-
-        {/* Maintenance Message */}
-        <section className="py-24 md:py-32 bg-background">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="bg-muted/50 rounded-lg border border-border p-12">
-              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Wrench size={40} className="text-primary" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Page Under Maintenance
-              </h2>
-              <p className="text-lg text-muted-foreground mb-6">
-                Our enrollment system is currently being upgraded to serve you
-                better.
-              </p>
-              <div className="space-y-4 text-muted-foreground">
-                <p>
-                  We're working hard to improve the application process. The
-                  enrollment form will be back online shortly.
-                </p>
-                <p>
-                  In the meantime, if you have any questions about admissions,
-                  please contact us at:
-                </p>
-                <div className="pt-4">
-                  <p className="font-semibold">aitec.mogotio@gmail.com</p>
-                  <p className="font-semibold">+254 715 244 974</p>
-                </div>
-              </div>
-              <Button asChild className="mt-8 bg-primary hover:bg-primary/90">
-                <a href="/">Return to Home</a>
-              </Button>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
-
-  // Original form code below (commented out but preserved)
-  /*
   return (
     <div className="w-full">
+      {/* Page Header with Background Image */}
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
@@ -141,17 +134,21 @@ export default function Enrollment() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4">Apply to AITEC</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-4">
+            Apply to AITEC
+          </h1>
           <p className="text-xl text-gray-100 max-w-2xl mx-auto">
             Start your journey with us. Complete the enrollment form below.
           </p>
         </div>
       </section>
 
+      {/* Enrollment Form */}
       <section className="py-24 md:py-32 bg-background">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {!submitted ? (
             <>
+              {/* Progress Steps */}
               <div className="mb-12">
                 <div className="flex justify-between items-start">
                   {steps.map((s, index) => (
@@ -161,24 +158,26 @@ export default function Enrollment() {
                           onClick={() => setStep(s.number)}
                           className={`w-12 h-12 rounded-full font-bold transition-all ${
                             s.number === step
-                              ? 'bg-primary text-primary-foreground ring-4 ring-primary/30'
+                              ? "bg-primary text-primary-foreground ring-4 ring-primary/30"
                               : s.number < step
-                                ? 'bg-accent text-accent-foreground'
-                                : 'bg-muted text-muted-foreground'
+                                ? "bg-accent text-accent-foreground"
+                                : "bg-muted text-muted-foreground"
                           }`}
                         >
                           {s.number < step ? <Check size={24} /> : s.number}
                         </button>
                         <div className="text-center mt-3">
                           <p className="font-bold text-sm">{s.title}</p>
-                          <p className="text-xs text-muted-foreground">{s.description}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {s.description}
+                          </p>
                         </div>
                       </div>
 
                       {index < steps.length - 1 && (
                         <div
                           className={`h-1 mx-2 flex-1 mb-6 ${
-                            s.number < step ? 'bg-accent' : 'bg-muted'
+                            s.number < step ? "bg-accent" : "bg-muted"
                           }`}
                         ></div>
                       )}
@@ -187,21 +186,29 @@ export default function Enrollment() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="bg-muted/50 rounded-lg border border-border p-8 md:p-12">
+              {/* Form Content */}
+              <form
+                onSubmit={handleSubmit}
+                className="bg-muted/50 rounded-lg border border-border p-8 md:p-12"
+              >
+                {/* Step 1: Personal Information */}
                 {step === 1 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold">Personal Information</h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="firstName"
+                          className="block text-sm font-medium mb-2"
+                        >
                           First Name
                         </label>
                         <Input
                           id="firstName"
                           name="firstName"
                           type="text"
-                          placeholder="John"
+                          placeholder="First Name"
                           value={formData.firstName}
                           onChange={handleChange}
                           required
@@ -210,14 +217,17 @@ export default function Enrollment() {
                       </div>
 
                       <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="lastName"
+                          className="block text-sm font-medium mb-2"
+                        >
                           Last Name
                         </label>
                         <Input
                           id="lastName"
                           name="lastName"
                           type="text"
-                          placeholder="Doe"
+                          placeholder="Last Name"
                           value={formData.lastName}
                           onChange={handleChange}
                           required
@@ -227,14 +237,17 @@ export default function Enrollment() {
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Email Address
                       </label>
                       <Input
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="john@example.com"
+                        placeholder="email@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -244,14 +257,17 @@ export default function Enrollment() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label htmlFor="phone" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="phone"
+                          className="block text-sm font-medium mb-2"
+                        >
                           Phone Number
                         </label>
                         <Input
                           id="phone"
                           name="phone"
                           type="tel"
-                          placeholder="+1 (555) 000-0000"
+                          placeholder="(123) 456-7890"
                           value={formData.phone}
                           onChange={handleChange}
                           required
@@ -260,7 +276,10 @@ export default function Enrollment() {
                       </div>
 
                       <div>
-                        <label htmlFor="dateOfBirth" className="block text-sm font-medium mb-2">
+                        <label
+                          htmlFor="dateOfBirth"
+                          className="block text-sm font-medium mb-2"
+                        >
                           Date of Birth
                         </label>
                         <Input
@@ -277,12 +296,18 @@ export default function Enrollment() {
                   </div>
                 )}
 
+                {/* Step 2: Education */}
                 {step === 2 && (
                   <div className="space-y-6">
-                    <h2 className="text-2xl font-bold">Educational Background</h2>
+                    <h2 className="text-2xl font-bold">
+                      Educational Background
+                    </h2>
 
                     <div>
-                      <label htmlFor="highestEducation" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="highestEducation"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Highest Education Level
                       </label>
                       <select
@@ -302,7 +327,10 @@ export default function Enrollment() {
                     </div>
 
                     <div>
-                      <label htmlFor="university" className="block text-sm font-medium mb-2">
+                      <label
+                        htmlFor="university"
+                        className="block text-sm font-medium mb-2"
+                      >
                         Previous University/Institution (if applicable)
                       </label>
                       <Input
@@ -315,152 +343,70 @@ export default function Enrollment() {
                         className="bg-background border-border"
                       />
                     </div>
-
-                    <div>
-                      <label htmlFor="gpa" className="block text-sm font-medium mb-2">
-                        GPA (if applicable)
-                      </label>
-                      <Input
-                        id="gpa"
-                        name="gpa"
-                        type="text"
-                        placeholder="3.5/4.0"
-                        value={formData.gpa}
-                        onChange={handleChange}
-                        className="bg-background border-border"
-                      />
-                    </div>
                   </div>
                 )}
 
+                {/* Step 3: Program Selection */}
                 {step === 3 && (
                   <div className="space-y-6">
                     <h2 className="text-2xl font-bold">Choose Your Program</h2>
 
                     <div>
-                      <label htmlFor="program" className="block text-sm font-medium mb-2">
-                        Select a Program
+                      <label
+                        htmlFor="school"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Select a School
                       </label>
                       <select
-                        id="program"
-                        name="program"
-                        value={formData.program}
+                        id="school"
+                        name="school"
+                        value={formData.school}
                         onChange={handleChange}
                         required
                         className="w-full px-3 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                       >
-                        <option value="">Choose a program</option>
-                        {AITEC_DATA.programs.map((p) => (
-                          <option key={p.id} value={p.id}>
-                            {p.title}
+                        <option value="">Choose a school</option>
+                        {schools.map((s) => (
+                          <option key={s._id} value={s._id}>
+                            {s.name}
                           </option>
                         ))}
                       </select>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="country" className="block text-sm font-medium mb-2">
-                          Country
-                        </label>
-                        <Input
-                          id="country"
-                          name="country"
-                          type="text"
-                          placeholder="United States"
-                          value={formData.country}
-                          onChange={handleChange}
-                          required
-                          className="bg-background border-border"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="city" className="block text-sm font-medium mb-2">
-                          City
-                        </label>
-                        <Input
-                          id="city"
-                          name="city"
-                          type="text"
-                          placeholder="San Francisco"
-                          value={formData.city}
-                          onChange={handleChange}
-                          required
-                          className="bg-background border-border"
-                        />
-                      </div>
+                    <div>
+                      <label
+                        htmlFor="course"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Select a Course
+                      </label>
+                      <select
+                        id="course"
+                        name="course"
+                        value={formData.course}
+                        onChange={handleChange}
+                        required
+                        disabled={!formData.school || courses.length === 0}
+                        className="w-full px-3 py-2 bg-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <option value="">
+                          {formData.school
+                            ? "Choose a course"
+                            : "Select a school first"}
+                        </option>
+                        {courses.map((c) => (
+                          <option key={c._id} value={c._id}>
+                            {c.title}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 )}
 
-                {step === 4 && (
-                  <div className="space-y-8">
-                    <h2 className="text-2xl font-bold">Review Your Application</h2>
-
-                    <div className="space-y-6">
-                      <div className="bg-background rounded-lg p-6 border border-border">
-                        <h3 className="font-bold mb-4">Personal Information</h3>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <p>
-                            <span className="text-muted-foreground">Name:</span>{' '}
-                            {formData.firstName} {formData.lastName}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">Email:</span> {formData.email}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">Phone:</span> {formData.phone}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">DOB:</span>{' '}
-                            {formData.dateOfBirth}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-background rounded-lg p-6 border border-border">
-                        <h3 className="font-bold mb-4">Educational Background</h3>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <p>
-                            <span className="text-muted-foreground">Education Level:</span>{' '}
-                            {formData.highestEducation}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">University:</span>{' '}
-                            {formData.university || 'N/A'}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">GPA:</span>{' '}
-                            {formData.gpa || 'N/A'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="bg-background rounded-lg p-6 border border-border">
-                        <h3 className="font-bold mb-4">Program & Location</h3>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <p>
-                            <span className="text-muted-foreground">Program:</span>{' '}
-                            {formData.program}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">Country:</span>{' '}
-                            {formData.country}
-                          </p>
-                          <p>
-                            <span className="text-muted-foreground">City:</span> {formData.city}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="text-sm text-muted-foreground">
-                        Please review your information above. If everything looks correct, click "Submit Application" to proceed.
-                      </p>
-                    </div>
-                  </div>
-                )}
-
+                {/* Navigation Buttons */}
                 <div className="flex gap-4 mt-12 justify-between">
                   <Button
                     type="button"
@@ -472,7 +418,7 @@ export default function Enrollment() {
                     Previous
                   </Button>
 
-                  {step < 4 ? (
+                  {step < 3 ? (
                     <Button
                       type="button"
                       onClick={handleNext}
@@ -496,12 +442,18 @@ export default function Enrollment() {
               <div className="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
                 <Check size={32} className="text-accent-foreground" />
               </div>
-              <h2 className="text-3xl font-bold mb-4 text-accent">Application Submitted!</h2>
+              <h2 className="text-3xl font-bold mb-4 text-accent">
+                Application Submitted!
+              </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                Thank you for your application. We've received your information and will review it shortly. You'll receive a confirmation email at <strong>{formData.email}</strong> with further instructions.
+                Thank you for your application. We've received your information
+                and will review it shortly. You'll receive a confirmation email
+                at <strong>{formData.email}</strong> with further instructions.
               </p>
               <p className="text-muted-foreground mb-8">
-                Our admissions team typically responds within 5-7 business days. If you have any questions, feel free to contact us at <strong>aitec.mogotio@gmail.com</strong>.
+                Our admissions team typically responds within 5-7 business days.
+                If you have any questions, feel free to contact us at{" "}
+                <strong>admissions@aitec.edu</strong>.
               </p>
               <Button asChild className="bg-primary hover:bg-primary/90">
                 <a href="/">Return to Home</a>
@@ -512,9 +464,4 @@ export default function Enrollment() {
       </section>
     </div>
   );
-  */
-
-  // Return null or a loading state while in maintenance mode
-  // The maintenance message is rendered by the if statement above
-  return null;
 }

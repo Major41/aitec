@@ -47,6 +47,7 @@ interface Course {
   description: string;
   fullDescription: string;
   images: string[];
+  categories?: string[];
 }
 
 export default function CoursesPage() {
@@ -61,6 +62,7 @@ export default function CoursesPage() {
     description: "",
     fullDescription: "",
     images: [] as string[],
+    categories: [] as string[],
     duration: "",
     level: "",
   });
@@ -118,6 +120,7 @@ export default function CoursesPage() {
           description: "",
           fullDescription: "",
           images: [],
+          categories: [],
           duration: "",
           level: "",
         });
@@ -141,6 +144,7 @@ export default function CoursesPage() {
       description: course.description,
       fullDescription: course.fullDescription,
       images: course.images,
+      categories: course.categories || [],
       duration: "",
       level: "",
     });
@@ -174,6 +178,7 @@ export default function CoursesPage() {
         description: "",
         fullDescription: "",
         images: [],
+        categories: [],
         duration: "",
         level: "",
       });
@@ -246,6 +251,42 @@ export default function CoursesPage() {
                   required
                   placeholder="Brief course description"
                 />
+              </div>
+              <div>
+                <Label>Categories</Label>
+                <div className="space-y-2 mt-2">
+                  {["Diploma", "Certificate", "Artisan"].map((category) => (
+                    <div key={category} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={category}
+                        checked={formData.categories.includes(category)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setFormData({
+                              ...formData,
+                              categories: [...formData.categories, category],
+                            });
+                          } else {
+                            setFormData({
+                              ...formData,
+                              categories: formData.categories.filter(
+                                (c) => c !== category,
+                              ),
+                            });
+                          }
+                        }}
+                        className="w-4 h-4 rounded border-gray-300"
+                      />
+                      <Label
+                        htmlFor={category}
+                        className="font-normal cursor-pointer"
+                      >
+                        {category}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div>
                 <RichTextEditor

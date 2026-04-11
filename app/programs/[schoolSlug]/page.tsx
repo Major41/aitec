@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 interface Course {
   _id: string;
@@ -8,6 +8,7 @@ interface Course {
   slug: string;
   description: string;
   images: string[];
+  categories?: string[];
 }
 
 interface School {
@@ -20,19 +21,8 @@ interface School {
 
 async function getSchoolAndCourses(schoolSlug: string) {
   try {
-    let baseUrl;
-    if (process.env.NEXT_PUBLIC_BASE_URL) {
-      // Check if the env var already includes protocol
-      const envUrl = process.env.NEXT_PUBLIC_BASE_URL;
-      if (envUrl.startsWith('http://') || envUrl.startsWith('https://')) {
-        baseUrl = envUrl;
-      } else {
-        baseUrl = `https://${envUrl}`;
-      }
-    } else {
-      baseUrl = "http://localhost:3000";
-    }
-
+    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
+    
     const [schoolRes, coursesRes] = await Promise.all([
       fetch(`${baseUrl}/api/public/schools/${schoolSlug}`, {
         next: { revalidate: 3600 },
@@ -41,18 +31,16 @@ async function getSchoolAndCourses(schoolSlug: string) {
         next: { revalidate: 3600 },
       }),
     ]);
-    
+
     const schoolData = schoolRes.ok ? await schoolRes.json() : null;
-    const coursesData = coursesRes.ok
-      ? await coursesRes.json()
-      : { courses: [] };
+    const coursesData = coursesRes.ok ? await coursesRes.json() : { courses: [] };
 
     return {
       school: schoolData,
       courses: coursesData.courses || [],
     };
   } catch (error) {
-    console.error("Error fetching school data:", error);
+    console.error('Error fetching school data:', error);
     return { school: null, courses: [] };
   }
 }
@@ -112,20 +100,14 @@ export default async function SchoolCoursesPage({
             {/* School Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                  {school.name}
-                </h1>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">{school.name}</h1>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   {school.description}
                 </p>
               </div>
 
               <div className="flex gap-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90"
-                >
+                <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
                   <a href="#courses">Explore Courses</a>
                 </Button>
               </div>
@@ -157,9 +139,23 @@ export default async function SchoolCoursesPage({
                     className="group"
                   >
                     <div className="rounded-lg border border-border overflow-hidden hover:shadow-lg transition-all duration-300 h-full flex flex-col bg-card">
+                      {/* Course Categories */}
+                      {course.categories && course.categories.length > 0 && (
+                        <div className="px-6 pt-4 flex flex-wrap gap-2">
+                          {course.categories.map((category) => (
+                            <span
+                              key={category}
+                              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
+                            >
+                              {category}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Course Image */}
                       {course.images && course.images.length > 0 && (
-                        <div className="relative h-48 w-full overflow-hidden bg-muted">
+                        <div className="relative h-48 w-full overflow-hidden bg-muted mt-3">
                           <Image
                             src={course.images[0]}
                             alt={course.title}
@@ -206,8 +202,7 @@ export default async function SchoolCoursesPage({
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl font-bold">Ready to Enroll?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Start your application today and take the first step toward your
-              future.
+              Start your application today and take the first step toward your future.
             </p>
           </div>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
