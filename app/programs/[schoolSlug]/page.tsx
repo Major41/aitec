@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 interface Course {
   _id: string;
@@ -21,26 +21,27 @@ interface School {
 
 async function getSchoolAndCourses(schoolSlug: string) {
   try {
-    const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-    
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
+
     const [schoolRes, coursesRes] = await Promise.all([
-      fetch(`${baseUrl}/api/public/schools/${schoolSlug}`, {
-        next: { revalidate: 3600 },
-      }),
-      fetch(`${baseUrl}/api/public/schools/${schoolSlug}/courses`, {
-        next: { revalidate: 3600 },
-      }),
+      fetch(`${baseUrl}/api/public/schools/${schoolSlug}`),
+
+      fetch(`${baseUrl}/api/public/schools/${schoolSlug}/courses`),
     ]);
 
     const schoolData = schoolRes.ok ? await schoolRes.json() : null;
-    const coursesData = coursesRes.ok ? await coursesRes.json() : { courses: [] };
+    const coursesData = coursesRes.ok
+      ? await coursesRes.json()
+      : { courses: [] };
 
     return {
       school: schoolData,
       courses: coursesData.courses || [],
     };
   } catch (error) {
-    console.error('Error fetching school data:', error);
+    console.error("Error fetching school data:", error);
     return { school: null, courses: [] };
   }
 }
@@ -100,14 +101,20 @@ export default async function SchoolCoursesPage({
             {/* School Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">{school.name}</h1>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4">
+                  {school.name}
+                </h1>
                 <p className="text-lg text-muted-foreground leading-relaxed">
                   {school.description}
                 </p>
               </div>
 
               <div className="flex gap-4">
-                <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90"
+                >
                   <a href="#courses">Explore Courses</a>
                 </Button>
               </div>
@@ -202,7 +209,8 @@ export default async function SchoolCoursesPage({
           <div className="space-y-3">
             <h2 className="text-3xl md:text-4xl font-bold">Ready to Enroll?</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Start your application today and take the first step toward your future.
+              Start your application today and take the first step toward your
+              future.
             </p>
           </div>
           <Button asChild size="lg" className="bg-primary hover:bg-primary/90">

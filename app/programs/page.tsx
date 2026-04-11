@@ -35,9 +35,8 @@ async function getSchoolsWithCourses(): Promise<School[]> {
       baseUrl = "http://localhost:3000";
     }
 
-    const response = await fetch(`${baseUrl}/api/public/schools-with-courses`, {
-      next: { revalidate: 1800 },
-    });
+    const response = await fetch(`${baseUrl}/api/public/schools-with-courses`); 
+
     if (!response.ok) return [];
     return await response.json();
   } catch (error) {

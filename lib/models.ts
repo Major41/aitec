@@ -192,6 +192,48 @@ const ResourceSchema = new Schema<IResource>(
   { timestamps: true },
 );
 
+// Sports Schema
+export interface ISport extends Document {
+  title: string;
+  excerpt: string;
+  image: string;
+  category: string;
+  date: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const SportSchema = new Schema<ISport>(
+  {
+    title: { type: String, required: true },
+    excerpt: { type: String, required: true },
+    image: { type: String, required: true },
+    category: { type: String, required: true },
+    date: { type: Date, default: Date.now },
+  },
+  { timestamps: true },
+);
+
+// Facilities Schema
+export interface IFacility extends Document {
+  name: string;
+  description: string;
+  image: string;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const FacilitySchema = new Schema<IFacility>(
+  {
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    image: { type: String, required: true },
+    category: { type: String, required: true },
+  },
+  { timestamps: true },
+);
+
 // Export models (with check to prevent re-compilation)
 export const Admin =
   mongoose.models.Admin || mongoose.model<IAdmin>("Admin", AdminSchema);
@@ -212,3 +254,8 @@ export const Blog =
 export const Resource =
   mongoose.models.Resource ||
   mongoose.model<IResource>("Resource", ResourceSchema);
+export const Sport =
+  mongoose.models.Sport || mongoose.model<ISport>("Sport", SportSchema);
+export const Facility =
+  mongoose.models.Facility ||
+  mongoose.model<IFacility>("Facility", FacilitySchema);

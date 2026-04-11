@@ -16,6 +16,8 @@ import {
   Image,
   PenTool,
   School,
+  Building,
+  Trophy,
   File as FileIcon,
 } from "lucide-react";
 
@@ -65,6 +67,8 @@ export default function AdminDashboardLayout({
       href: "/admin-panel/dashboard/applications",
       icon: FileText,
     },
+    { label: 'Sports', href: '/admin-panel/dashboard/sports', icon: Trophy },
+    { label: 'Facilities', href: '/admin-panel/dashboard/facilities', icon: Building },
     { label: "Gallery", href: "/admin-panel/dashboard/gallery", icon: Image },
     { label: "Blogs", href: "/admin-panel/dashboard/blogs", icon: PenTool },
     // {

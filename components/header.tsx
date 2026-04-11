@@ -16,7 +16,7 @@ export function Header() {
     { href: '/facilities', label: 'Facilities' },
     { href: "/sports", label: "Sports" },
     { href: "/gallery", label: "Gallery" },
-    { href: "/blogs", label: "Blogs" },
+    { href: "/news", label: "News" },
     { href: "/contact", label: "Contact" },
   ];
 

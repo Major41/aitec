@@ -18,11 +18,7 @@ export async function GET() {
       courses: allCourses.filter((course: any) => course.schoolId.toString() === school._id.toString()),
     }));
 
-    return NextResponse.json(schoolsWithCourses, {
-      headers: {
-        'Cache-Control': 'public, s-maxage=1800, stale-while-revalidate=86400',
-      },
-    });
+    return NextResponse.json(schoolsWithCourses);
   } catch (error) {
     console.error('Error fetching schools with courses:', error);
     return NextResponse.json({ error: 'Failed to fetch schools' }, { status: 500 });
