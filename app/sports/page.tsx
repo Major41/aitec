@@ -58,7 +58,7 @@ export default function Sports() {
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 -z-10">
           <Image
-            src="/images/hero-4.jpg"
+            src="/coastal.jpg"
             alt="Sports background"
             fill
             className="object-cover"
