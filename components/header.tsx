@@ -29,8 +29,8 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-2 gap-4">
             {/* School Name */}
-            <h1 className="text-sm sm:text-base font-semibold text-foreground">
-              Signet Institute of Australia
+            <h1 className="text-sm sm:text-base font-semibold text-red-600">
+              AFRICAN INTERNATIONAL TECHNICAL COLLEGE
             </h1>
 
             {/* Contact Info - Hidden on Mobile */}
